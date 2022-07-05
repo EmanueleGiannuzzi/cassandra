@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.cassandra.io.util.BufferedDataOutputStreamPlus;
 import org.apache.cassandra.io.util.DataOutputStreamPlus;
 import org.apache.cassandra.io.util.File;
+import org.apache.cassandra.io.util.FileOutputStreamPlus;
 import org.apache.cassandra.simulator.ClusterSimulation;
 import org.apache.cassandra.simulator.RandomSource;
 import org.apache.cassandra.simulator.SimulationRunner.RecordOption;
@@ -82,9 +83,9 @@ public class Record
             logger.error("Seed 0x{} ({}) (With: {})", Long.toHexString(seed), eventFile, modifiers);
         }
 
-        try (PrintWriter eventOut = new PrintWriter(new GZIPOutputStream(eventFile.newOutputStream(OVERWRITE), 1 << 16));
-             DataOutputStreamPlus rngOut = new BufferedDataOutputStreamPlus(Channels.newChannel(withRng != NONE ? new GZIPOutputStream(rngFile.newOutputStream(OVERWRITE), 1 << 16) : new ByteArrayOutputStream(0)));
-             DataOutputStreamPlus timeOut = new BufferedDataOutputStreamPlus(Channels.newChannel(withTime != NONE ? new GZIPOutputStream(timeFile.newOutputStream(OVERWRITE), 1 << 16) : new ByteArrayOutputStream(0))))
+        try (PrintWriter eventOut = new PrintWriter(new GZIPOutputStream(FileOutputStreamPlus.newOutputStream(eventFile, OVERWRITE), 1 << 16));
+             DataOutputStreamPlus rngOut = new BufferedDataOutputStreamPlus(Channels.newChannel(withRng != NONE ? new GZIPOutputStream(FileOutputStreamPlus.newOutputStream(rngFile, OVERWRITE), 1 << 16) : new ByteArrayOutputStream(0)));
+             DataOutputStreamPlus timeOut = new BufferedDataOutputStreamPlus(Channels.newChannel(withTime != NONE ? new GZIPOutputStream(FileOutputStreamPlus.newOutputStream(timeFile, OVERWRITE), 1 << 16) : new ByteArrayOutputStream(0))))
         {
             eventOut.println("modifiers:"
                              + (withRng == VALUE ? "rng," : "") + (withRng == WITH_CALLSITES ? "rngCallSites," : "")

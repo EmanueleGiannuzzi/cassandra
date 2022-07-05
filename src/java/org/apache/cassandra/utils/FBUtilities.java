@@ -845,7 +845,7 @@ public class FBUtilities
 
     public static void serializeToJsonFile(Object object, File outputFile) throws IOException
     {
-        try (FileOutputStreamPlus out = outputFile.newOutputStream(OVERWRITE))
+        try (FileOutputStreamPlus out = FileOutputStreamPlus.newOutputStream(outputFile, OVERWRITE))
         {
             jsonMapper.writeValue((OutputStream) out, object);
         }

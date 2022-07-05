@@ -352,7 +352,7 @@ public abstract class SSTable
     protected static void appendTOC(Descriptor descriptor, Collection<Component> components)
     {
         File tocFile = new File(descriptor.filenameFor(Component.TOC));
-        try (FileOutputStreamPlus out = tocFile.newOutputStream(APPEND);
+        try (FileOutputStreamPlus out = FileOutputStreamPlus.newOutputStream(tocFile, APPEND);
              PrintWriter w = new PrintWriter(out))
         {
             for (Component component : components)

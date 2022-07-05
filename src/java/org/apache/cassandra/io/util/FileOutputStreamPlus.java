@@ -66,4 +66,10 @@ public class FileOutputStreamPlus extends BufferedDataOutputStreamPlus
     {
         return (FileChannel) channel;
     }
+
+
+    public static FileOutputStreamPlus newOutputStream(File file, File.WriteMode mode) throws NoSuchFileException
+    {
+        return new FileOutputStreamPlus(file, mode);
+    }
 }
