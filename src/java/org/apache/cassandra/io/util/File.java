@@ -732,10 +732,6 @@ public class File implements Comparable<File>
         }
     }
 
-    public FileWriter newWriter(WriteMode mode) throws IOException
-    {
-        return new FileWriter(this, mode);
-    }
     public FileInputStreamPlus newInputStream() throws NoSuchFileException
     {
         return new FileInputStreamPlus(this);

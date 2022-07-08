@@ -287,7 +287,7 @@ public class NodeTool
         String cmdLine = Joiner.on(" ").skipNulls().join(args);
         cmdLine = cmdLine.replaceFirst("(?<=(-pw|--password))\\s+\\S+", " <hidden>");
 
-        try (FileWriter writer = new File(FBUtilities.getToolsOutputDirectory(), HISTORYFILE).newWriter(APPEND))
+        try (FileWriter writer = new FileWriter(new File(FBUtilities.getToolsOutputDirectory(), HISTORYFILE), APPEND))
         {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
             writer.append(sdf.format(new Date())).append(": ").append(cmdLine).append(System.lineSeparator());

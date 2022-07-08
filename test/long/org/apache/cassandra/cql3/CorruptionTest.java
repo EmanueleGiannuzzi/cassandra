@@ -145,11 +145,11 @@ public class CorruptionTest extends SchemaLoader
                     String basename = "bad-data-tid" + Thread.currentThread().getId();
                     File put = new File(basename+"-put");
                     File get = new File(basename+"-get");
-                    try (FileWriter pw = put.newWriter(File.WriteMode.OVERWRITE))
+                    try (FileWriter pw = new FileWriter(put, File.WriteMode.OVERWRITE))
                     {
                         pw.write(new String(putdata));
                     }
-                    try (FileWriter pw = get.newWriter(File.WriteMode.OVERWRITE))
+                    try (FileWriter pw = new FileWriter(get, File.WriteMode.OVERWRITE))
                     {
                         pw.write(new String(getdata));
                     }
