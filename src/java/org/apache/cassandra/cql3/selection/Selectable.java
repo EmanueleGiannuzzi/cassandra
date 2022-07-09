@@ -89,7 +89,7 @@ public interface Selectable extends AssignmentTestable
     default public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
     {
         AbstractType<?> type = getExactTypeIfKnown(keyspace);
-        return type == null ? TestResult.NOT_ASSIGNABLE : type.testAssignment(keyspace, receiver);
+        return type == null ? TestResult.NOT_ASSIGNABLE : type.testAssignment(receiver.type);
     }
 
     default int addAndGetIndex(ColumnMetadata def, List<ColumnMetadata> l)

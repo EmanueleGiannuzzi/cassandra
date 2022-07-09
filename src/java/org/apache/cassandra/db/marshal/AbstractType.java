@@ -53,7 +53,7 @@ import static org.apache.cassandra.db.marshal.AbstractType.ComparisonType.CUSTOM
  * represent a valid ByteBuffer for the type being compared.
  */
 @Unmetered
-public abstract class AbstractType<T> implements Comparator<ByteBuffer>, AssignmentTestable
+public abstract class AbstractType<T> implements Comparator<ByteBuffer>
 {
     public final Comparator<ByteBuffer> reverseComparator;
 
@@ -618,10 +618,5 @@ public abstract class AbstractType<T> implements Comparator<ByteBuffer>, Assignm
             case NOT_COMPARABLE:
                 throw new IllegalArgumentException(this + " cannot be used in comparisons, so cannot be used as a clustering column");
         }
-    }
-
-    public final AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
-    {
-        return testAssignment(receiver.type);
     }
 }
