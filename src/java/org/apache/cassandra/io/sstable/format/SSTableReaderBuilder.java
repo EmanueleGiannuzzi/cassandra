@@ -236,7 +236,7 @@ public abstract class SSTableReaderBuilder
      */
     IFilter loadBloomFilter() throws IOException
     {
-        try (FileInputStreamPlus stream = new File(descriptor.filenameFor(Component.FILTER)).newInputStream())
+        try (FileInputStreamPlus stream = new FileInputStreamPlus(new File(descriptor.filenameFor(Component.FILTER))))
         {
             return BloomFilterSerializer.deserialize(stream, descriptor.version.hasOldBfFormat());
         }

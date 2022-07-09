@@ -732,11 +732,6 @@ public class File implements Comparable<File>
         }
     }
 
-    public FileInputStreamPlus newInputStream() throws NoSuchFileException
-    {
-        return new FileInputStreamPlus(this);
-    }
-
     private Path toPathForWrite()
     {
         if (path == null)

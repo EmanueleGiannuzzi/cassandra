@@ -853,7 +853,7 @@ public class FBUtilities
 
     public static <T> T deserializeFromJsonFile(Class<T> tClass, File file) throws IOException
     {
-        try (FileInputStreamPlus in = file.newInputStream())
+        try (FileInputStreamPlus in = new FileInputStreamPlus(file))
         {
             return jsonMapper.readValue((InputStream) in, tClass);
         }

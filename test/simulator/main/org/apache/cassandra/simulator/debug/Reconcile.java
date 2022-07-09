@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.cassandra.io.util.DataInputPlus;
 import org.apache.cassandra.io.util.File;
+import org.apache.cassandra.io.util.FileInputStreamPlus;
 import org.apache.cassandra.simulator.ClusterSimulation;
 import org.apache.cassandra.simulator.RandomSource;
 import org.apache.cassandra.simulator.SimulationRunner.RecordOption;
@@ -433,9 +434,9 @@ public class Reconcile
         File rngFile = new File(new File(loadFromDir), Long.toHexString(seed) + ".rng.gz");
         File timeFile = new File(new File(loadFromDir), Long.toHexString(seed) + ".time.gz");
 
-        try (BufferedReader eventIn = new BufferedReader(new InputStreamReader(new GZIPInputStream(eventFile.newInputStream())));
-             DataInputPlus.DataInputStreamPlus rngIn = new DataInputPlus.DataInputStreamPlus(rngFile.exists() && withRng != NONE ? new GZIPInputStream(rngFile.newInputStream()) : new ByteArrayInputStream(new byte[0]));
-             DataInputPlus.DataInputStreamPlus timeIn = new DataInputPlus.DataInputStreamPlus(timeFile.exists() && withTime != NONE ? new GZIPInputStream(timeFile.newInputStream()) : new ByteArrayInputStream(new byte[0])))
+        try (BufferedReader eventIn = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStreamPlus(eventFile))));
+             DataInputPlus.DataInputStreamPlus rngIn = new DataInputPlus.DataInputStreamPlus(rngFile.exists() && withRng != NONE ? new GZIPInputStream(new FileInputStreamPlus(rngFile)) : new ByteArrayInputStream(new byte[0]));
+             DataInputPlus.DataInputStreamPlus timeIn = new DataInputPlus.DataInputStreamPlus(timeFile.exists() && withTime != NONE ? new GZIPInputStream(new FileInputStreamPlus(timeFile)) : new ByteArrayInputStream(new byte[0])))
         {
             boolean inputHasWaitSites, inputHasWakeSites, inputHasRngCallSites, inputHasTimeCallSites;
             {

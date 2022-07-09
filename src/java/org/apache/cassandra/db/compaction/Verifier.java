@@ -448,7 +448,7 @@ public class Verifier implements Closeable
         File bfPath = new File(sstable.descriptor.filenameFor(Component.FILTER));
         if (bfPath.exists())
         {
-            try (FileInputStreamPlus stream = bfPath.newInputStream();
+            try (FileInputStreamPlus stream = new FileInputStreamPlus(bfPath);
                  IFilter bf = BloomFilterSerializer.deserialize(stream, sstable.descriptor.version.hasOldBfFormat()))
             {
             }

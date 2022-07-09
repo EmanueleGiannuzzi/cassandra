@@ -95,7 +95,7 @@ public class CompressionMetadata
     {
         this.indexFilePath = indexFilePath;
 
-        try (FileInputStreamPlus stream = new File(indexFilePath).newInputStream())
+        try (FileInputStreamPlus stream = new FileInputStreamPlus(new File(indexFilePath)))
         {
             String compressorName = stream.readUTF();
             int optionCount = stream.readInt();
