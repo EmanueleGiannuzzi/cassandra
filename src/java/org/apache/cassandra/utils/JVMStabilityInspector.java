@@ -22,15 +22,18 @@ import java.net.SocketException;
 import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 
 import org.apache.cassandra.exceptions.UnrecoverableIllegalStateException;
+import org.apache.cassandra.io.FSErrorHandler;
 import org.apache.cassandra.metrics.StorageMetrics;
 import org.apache.cassandra.tracing.Tracing;
 import org.slf4j.Logger;
@@ -59,6 +62,8 @@ public final class JVMStabilityInspector
 
     // It is used for unit test
     public static OnKillHook killerHook;
+
+    private static final AtomicReference<Optional<FSErrorHandler>> fsErrorHandler = new AtomicReference<>(Optional.empty());
 
     private JVMStabilityInspector() {}
 
@@ -95,9 +100,9 @@ public final class JVMStabilityInspector
     private static void inspectDiskError(Throwable t)
     {
         if (t instanceof CorruptSSTableException)
-            FileUtils.handleCorruptSSTable((CorruptSSTableException) t);
+            handleCorruptSSTable((CorruptSSTableException) t);
         else if (t instanceof FSError)
-            FileUtils.handleFSError((FSError) t);
+            handleFSError((FSError) t);
     }
 
     public static void inspectThrowable(Throwable t, Consumer<Throwable> fn) throws OutOfMemoryError
@@ -148,7 +153,7 @@ public final class JVMStabilityInspector
         if (isUnstable)
         {
             if (!StorageService.instance.isDaemonSetupCompleted())
-                FileUtils.handleStartupFSError(t);
+                handleStartupFSError(t);
             killer.killCurrentJVM(t);
         }
 
@@ -274,5 +279,26 @@ public final class JVMStabilityInspector
          * @return False will skip exit
          */
         boolean execute(Throwable t);
+    }
+
+
+    public static void handleCorruptSSTable(CorruptSSTableException e)
+    {
+        fsErrorHandler.get().ifPresent(handler -> handler.handleCorruptSSTable(e));
+    }
+
+    public static void handleFSError(FSError e)
+    {
+        fsErrorHandler.get().ifPresent(handler -> handler.handleFSError(e));
+    }
+
+    public static void handleStartupFSError(Throwable t)
+    {
+        fsErrorHandler.get().ifPresent(handler -> handler.handleStartupFSError(t));
+    }
+
+    public static void setFSErrorHandler(FSErrorHandler handler)
+    {
+        fsErrorHandler.getAndSet(Optional.ofNullable(handler));
     }
 }

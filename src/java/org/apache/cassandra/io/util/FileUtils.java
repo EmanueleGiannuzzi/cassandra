@@ -81,7 +81,6 @@ public final class FileUtils
     public static final long ONE_TIB = 1024 * ONE_GIB;
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
-    private static final AtomicReference<Optional<FSErrorHandler>> fsErrorHandler = new AtomicReference<>(Optional.empty());
 
     private static final Class clsDirectBuffer;
     private static final MethodHandle mhDirectBufferCleaner;
@@ -453,20 +452,6 @@ public final class FileUtils
         }
     }
 
-    public static void handleCorruptSSTable(CorruptSSTableException e)
-    {
-        fsErrorHandler.get().ifPresent(handler -> handler.handleCorruptSSTable(e));
-    }
-
-    public static void handleFSError(FSError e)
-    {
-        fsErrorHandler.get().ifPresent(handler -> handler.handleFSError(e));
-    }
-
-    public static void handleStartupFSError(Throwable t)
-    {
-        fsErrorHandler.get().ifPresent(handler -> handler.handleStartupFSError(t));
-    }
 
     /**
      * handleFSErrorAndPropagate will invoke the disk failure policy error handler,
@@ -599,10 +584,6 @@ public final class FileUtils
         }
     }
 
-    public static void setFSErrorHandler(FSErrorHandler handler)
-    {
-        fsErrorHandler.getAndSet(Optional.ofNullable(handler));
-    }
 
     @Deprecated
     public static void createDirectory(String directory)

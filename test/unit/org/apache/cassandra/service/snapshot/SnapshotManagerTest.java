@@ -31,6 +31,7 @@ import org.junit.rules.TemporaryFolder;
 import org.apache.cassandra.config.DatabaseDescriptor;
 import org.apache.cassandra.io.util.FileUtils;
 import org.apache.cassandra.service.DefaultFSErrorHandler;
+import org.apache.cassandra.utils.JVMStabilityInspector;
 
 import static org.apache.cassandra.service.snapshot.TableSnapshotTest.createFolders;
 import static org.apache.cassandra.utils.FBUtilities.now;
@@ -44,7 +45,7 @@ public class SnapshotManagerTest
     public static void beforeClass()
     {
         DatabaseDescriptor.daemonInitialization();
-        FileUtils.setFSErrorHandler(new DefaultFSErrorHandler());
+        JVMStabilityInspector.setFSErrorHandler(new DefaultFSErrorHandler());
     }
 
     @ClassRule

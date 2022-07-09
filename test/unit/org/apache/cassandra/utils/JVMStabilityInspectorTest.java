@@ -59,7 +59,7 @@ public class JVMStabilityInspectorTest
 
         Config.DiskFailurePolicy oldPolicy = DatabaseDescriptor.getDiskFailurePolicy();
         Config.CommitFailurePolicy oldCommitPolicy = DatabaseDescriptor.getCommitFailurePolicy();
-        FileUtils.setFSErrorHandler(new DefaultFSErrorHandler());
+        JVMStabilityInspector.setFSErrorHandler(new DefaultFSErrorHandler());
         try
         {
             CassandraDaemon daemon = new CassandraDaemon();
@@ -114,7 +114,7 @@ public class JVMStabilityInspectorTest
             DatabaseDescriptor.setDiskFailurePolicy(oldPolicy);
             DatabaseDescriptor.setCommitFailurePolicy(oldCommitPolicy);
             StorageService.instance.registerDaemon(null);
-            FileUtils.setFSErrorHandler(null);
+            JVMStabilityInspector.setFSErrorHandler(null);
         }
     }
 

@@ -122,7 +122,7 @@ public class DirectoriesTest
     public static void beforeClass()
     {
         DatabaseDescriptor.daemonInitialization();
-        FileUtils.setFSErrorHandler(new DefaultFSErrorHandler());
+        JVMStabilityInspector.setFSErrorHandler(new DefaultFSErrorHandler());
     }
 
     @Before
