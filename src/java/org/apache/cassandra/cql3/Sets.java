@@ -64,24 +64,24 @@ public abstract class Sets
      * @param receiver the receiving column
      * @param elements the set elements
      */
-    public static AssignmentTestable.TestResult testSetAssignment(ColumnSpecification receiver,
-                                                                  List<? extends AssignmentTestable> elements)
+    public static TestResult testSetAssignment(ColumnSpecification receiver,
+                                               List<? extends AssignmentTestable> elements)
     {
         if (!(receiver.type instanceof SetType))
         {
             // We've parsed empty maps as a set literal to break the ambiguity so handle that case now
             if (receiver.type instanceof MapType && elements.isEmpty())
-                return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                return TestResult.WEAKLY_ASSIGNABLE;
 
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
         }
 
         // If there is no elements, we can't say it's an exact match (an empty set if fundamentally polymorphic).
         if (elements.isEmpty())
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
 
         ColumnSpecification valueSpec = valueSpecOf(receiver);
-        return AssignmentTestable.TestResult.testAll(receiver.ksName, valueSpec, elements);
+        return TestResult.testAll(receiver.ksName, valueSpec, elements);
     }
 
     /**
@@ -183,7 +183,7 @@ public abstract class Sets
             }
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             return testSetAssignment(receiver, elements);
         }

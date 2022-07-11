@@ -113,9 +113,9 @@ public abstract class Constants
             return UNSET_VALUE;
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
         }
 
         public String getText()
@@ -144,11 +144,11 @@ public abstract class Constants
             return NULL_VALUE;
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             return receiver.type instanceof CounterColumnType
-                 ? AssignmentTestable.TestResult.NOT_ASSIGNABLE
-                 : AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                 ? TestResult.NOT_ASSIGNABLE
+                 : TestResult.WEAKLY_ASSIGNABLE;
         }
 
         public String getText()
@@ -260,21 +260,21 @@ public abstract class Constants
         }
 
         @Override
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             CQL3Type receiverType = receiver.type.asCQL3Type();
             if (receiverType.isCollection() || receiverType.isUDT())
-                return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+                return TestResult.NOT_ASSIGNABLE;
 
             if (!(receiverType instanceof CQL3Type.Native))
                 // Skip type validation for custom types. May or may not be a good idea
-                return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                return TestResult.WEAKLY_ASSIGNABLE;
 
             CQL3Type.Native nt = (CQL3Type.Native)receiverType;
 
             // If the receiver type match the prefered type we can straight away return an exact match
             if (nt.getType().equals(preferedType))
-                return AssignmentTestable.TestResult.EXACT_MATCH;
+                return TestResult.EXACT_MATCH;
 
             switch (type)
             {
@@ -288,7 +288,7 @@ public abstract class Constants
                         case DATE:
                         case TIME:
                         case TIMESTAMP:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case INTEGER:
@@ -307,7 +307,7 @@ public abstract class Constants
                         case TIMESTAMP:
                         case TINYINT:
                         case VARINT:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case UUID:
@@ -315,7 +315,7 @@ public abstract class Constants
                     {
                         case UUID:
                         case TIMEUUID:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case FLOAT:
@@ -324,32 +324,32 @@ public abstract class Constants
                         case DECIMAL:
                         case DOUBLE:
                         case FLOAT:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case BOOLEAN:
                     switch (nt)
                     {
                         case BOOLEAN:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case HEX:
                     switch (nt)
                     {
                         case BLOB:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
                 case DURATION:
                     switch (nt)
                     {
                         case DURATION:
-                            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                            return TestResult.WEAKLY_ASSIGNABLE;
                     }
                     break;
             }
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
         }
 
         public AbstractType<?> getExactTypeIfKnown(String keyspace)

@@ -1127,11 +1127,11 @@ public interface Selectable extends AssignmentTestable
         public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             if (receiver.type.equals(type))
-                return AssignmentTestable.TestResult.EXACT_MATCH;
+                return TestResult.EXACT_MATCH;
             else if (receiver.type.isValueCompatibleWith(type))
-                return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                return TestResult.WEAKLY_ASSIGNABLE;
             else
-                return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+                return TestResult.NOT_ASSIGNABLE;
         }
 
         @Override

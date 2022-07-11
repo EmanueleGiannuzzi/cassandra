@@ -77,17 +77,17 @@ public abstract class UserTypes
      * @param receiver the receiving column
      * @param entries the map entries
      */
-    public static <T extends AssignmentTestable> AssignmentTestable.TestResult testUserTypeAssignment(ColumnSpecification receiver,
-                                                                                                      Map<FieldIdentifier, T> entries)
+    public static <T extends AssignmentTestable> TestResult testUserTypeAssignment(ColumnSpecification receiver,
+                                                                                   Map<FieldIdentifier, T> entries)
     {
         try
         {
             validateUserTypeAssignableTo(receiver, entries);
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
         }
         catch (InvalidRequestException e)
         {
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
         }
     }
 
@@ -187,7 +187,7 @@ public abstract class UserTypes
             }
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             return testUserTypeAssignment(receiver, entries);
         }

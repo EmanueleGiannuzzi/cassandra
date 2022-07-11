@@ -25,6 +25,7 @@ import org.apache.cassandra.cql3.AbstractMarker;
 import org.apache.cassandra.cql3.AssignmentTestable;
 import org.apache.cassandra.cql3.ColumnIdentifier;
 import org.apache.cassandra.cql3.ColumnSpecification;
+import org.apache.cassandra.cql3.TestResult;
 import org.apache.cassandra.schema.Schema;
 import org.apache.cassandra.db.marshal.AbstractType;
 import org.apache.cassandra.exceptions.InvalidRequestException;
@@ -140,7 +141,7 @@ public final class FunctionResolver
         {
             if (matchReturnType(toTest, receiverType))
             {
-                AssignmentTestable.TestResult r = matchAguments(keyspace, toTest, providedArgs, receiverKs, receiverCf);
+                TestResult r = matchAguments(keyspace, toTest, providedArgs, receiverKs, receiverCf);
                 switch (r)
                 {
                     case EXACT_MATCH:
@@ -244,32 +245,32 @@ public final class FunctionResolver
         }
     }
 
-    private static AssignmentTestable.TestResult matchAguments(String keyspace,
-                                                               Function fun,
-                                                               List<? extends AssignmentTestable> providedArgs,
-                                                               String receiverKs,
-                                                               String receiverCf)
+    private static TestResult matchAguments(String keyspace,
+                                            Function fun,
+                                            List<? extends AssignmentTestable> providedArgs,
+                                            String receiverKs,
+                                            String receiverCf)
     {
         if (providedArgs.size() != fun.argTypes().size())
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
 
         // It's an exact match if all are exact match, but is not assignable as soon as any is non assignable.
-        AssignmentTestable.TestResult res = AssignmentTestable.TestResult.EXACT_MATCH;
+        TestResult res = TestResult.EXACT_MATCH;
         for (int i = 0; i < providedArgs.size(); i++)
         {
             AssignmentTestable provided = providedArgs.get(i);
             if (provided == null)
             {
-                res = AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                res = TestResult.WEAKLY_ASSIGNABLE;
                 continue;
             }
 
             ColumnSpecification expected = makeArgSpec(receiverKs, receiverCf, fun, i);
-            AssignmentTestable.TestResult argRes = provided.testAssignment(keyspace, expected);
-            if (argRes == AssignmentTestable.TestResult.NOT_ASSIGNABLE)
-                return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
-            if (argRes == AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE)
-                res = AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            TestResult argRes = provided.testAssignment(keyspace, expected);
+            if (argRes == TestResult.NOT_ASSIGNABLE)
+                return TestResult.NOT_ASSIGNABLE;
+            if (argRes == TestResult.WEAKLY_ASSIGNABLE)
+                res = TestResult.WEAKLY_ASSIGNABLE;
         }
         return res;
     }

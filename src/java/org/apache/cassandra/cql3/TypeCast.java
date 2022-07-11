@@ -47,15 +47,15 @@ public class TypeCast extends Term.Raw
         return new ColumnSpecification(receiver.ksName, receiver.cfName, new ColumnIdentifier(toString(), true), type.prepare(keyspace).getType());
     }
 
-    public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+    public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
     {
         AbstractType<?> castedType = type.prepare(keyspace).getType();
         if (receiver.type.equals(castedType))
-            return AssignmentTestable.TestResult.EXACT_MATCH;
+            return TestResult.EXACT_MATCH;
         else if (receiver.type.isValueCompatibleWith(castedType))
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
         else
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
     }
 
     public AbstractType<?> getExactTypeIfKnown(String keyspace)

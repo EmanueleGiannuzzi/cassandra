@@ -74,22 +74,22 @@ public abstract class Maps
      * @param receiver the receiving column
      * @param entries the map entries
      */
-    public static <T extends AssignmentTestable> AssignmentTestable.TestResult testMapAssignment(ColumnSpecification receiver,
-                                                                                                 List<Pair<T, T>> entries)
+    public static <T extends AssignmentTestable> TestResult testMapAssignment(ColumnSpecification receiver,
+                                                                              List<Pair<T, T>> entries)
     {
         ColumnSpecification keySpec = keySpecOf(receiver);
         ColumnSpecification valueSpec = valueSpecOf(receiver);
 
         // It's an exact match if all are exact match, but is not assignable as soon as any is non assignable.
-        AssignmentTestable.TestResult res = AssignmentTestable.TestResult.EXACT_MATCH;
+        TestResult res = TestResult.EXACT_MATCH;
         for (Pair<T, T> entry : entries)
         {
-            AssignmentTestable.TestResult t1 = entry.left.testAssignment(receiver.ksName, keySpec);
-            AssignmentTestable.TestResult t2 = entry.right.testAssignment(receiver.ksName, valueSpec);
-            if (t1 == AssignmentTestable.TestResult.NOT_ASSIGNABLE || t2 == AssignmentTestable.TestResult.NOT_ASSIGNABLE)
-                return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
-            if (t1 != AssignmentTestable.TestResult.EXACT_MATCH || t2 != AssignmentTestable.TestResult.EXACT_MATCH)
-                res = AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            TestResult t1 = entry.left.testAssignment(receiver.ksName, keySpec);
+            TestResult t2 = entry.right.testAssignment(receiver.ksName, valueSpec);
+            if (t1 == TestResult.NOT_ASSIGNABLE || t2 == TestResult.NOT_ASSIGNABLE)
+                return TestResult.NOT_ASSIGNABLE;
+            if (t1 != TestResult.EXACT_MATCH || t2 != TestResult.EXACT_MATCH)
+                res = TestResult.WEAKLY_ASSIGNABLE;
         }
         return res;
     }
@@ -197,7 +197,7 @@ public abstract class Maps
             }
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             return testMapAssignment(receiver, entries);
         }

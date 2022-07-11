@@ -80,18 +80,18 @@ public abstract class Lists
      * @param receiver the receiving column
      * @param elements the list elements
      */
-    public static AssignmentTestable.TestResult testListAssignment(ColumnSpecification receiver,
-                                                                   List<? extends AssignmentTestable> elements)
+    public static TestResult testListAssignment(ColumnSpecification receiver,
+                                                List<? extends AssignmentTestable> elements)
     {
         if (!(receiver.type instanceof ListType))
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
 
         // If there is no elements, we can't say it's an exact match (an empty list if fundamentally polymorphic).
         if (elements.isEmpty())
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
 
         ColumnSpecification valueSpec = valueSpecOf(receiver);
-        return AssignmentTestable.TestResult.testAll(receiver.ksName, valueSpec, elements);
+        return TestResult.testAll(receiver.ksName, valueSpec, elements);
     }
 
     /**
@@ -181,7 +181,7 @@ public abstract class Lists
             }
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             return testListAssignment(receiver, elements);
         }

@@ -192,7 +192,7 @@ public class FunctionCall extends Term.NonTerminal
             return new FunctionCall(scalarFun, parameters);
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             // Note: Functions.get() will return null if the function doesn't exist, or throw is no function matching
             // the arguments can be found. We may get one of those if an undefined/wrong function is used as argument
@@ -209,15 +209,15 @@ public class FunctionCall extends Term.NonTerminal
                     return TestResult.WEAKLY_ASSIGNABLE;
 
                 if (fun != null && receiver.type.udfType().equals(fun.returnType()))
-                    return AssignmentTestable.TestResult.EXACT_MATCH;
+                    return TestResult.EXACT_MATCH;
                 else if (fun == null || receiver.type.udfType().isValueCompatibleWith(fun.returnType()))
-                    return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                    return TestResult.WEAKLY_ASSIGNABLE;
                 else
-                    return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+                    return TestResult.NOT_ASSIGNABLE;
             }
             catch (InvalidRequestException e)
             {
-                return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+                return TestResult.WEAKLY_ASSIGNABLE;
             }
         }
 

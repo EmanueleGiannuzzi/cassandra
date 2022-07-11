@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 
 import org.apache.cassandra.cql3.ColumnIdentifier;
 import org.apache.cassandra.cql3.ColumnSpecification;
+import org.apache.cassandra.cql3.TestResult;
 import org.apache.cassandra.cql3.VariableSpecifications;
 import org.apache.cassandra.cql3.selection.Selector.Factory;
 import org.apache.cassandra.db.marshal.AbstractType;

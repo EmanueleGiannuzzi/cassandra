@@ -90,9 +90,9 @@ public abstract class AbstractMarker extends Term.NonTerminal
         }
 
         @Override
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
         }
 
         public AbstractType<?> getExactTypeIfKnown(String keyspace)
@@ -122,9 +122,9 @@ public abstract class AbstractMarker extends Term.NonTerminal
             throw new AssertionError("MultiColumnRaw..prepare() requires a list of receivers");
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
         }
 
         @Override

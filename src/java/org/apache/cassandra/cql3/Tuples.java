@@ -110,7 +110,7 @@ public class Tuples
             return allTerminal ? value.bind(QueryOptions.DEFAULT) : value;
         }
 
-        public AssignmentTestable.TestResult testAssignment(String keyspace, ColumnSpecification receiver)
+        public TestResult testAssignment(String keyspace, ColumnSpecification receiver)
         {
             // The parser cannot differentiate between a tuple with one element and a term between parenthesis.
             // By consequence, we need to wait until we know the target type to determine which one it is.
@@ -503,17 +503,17 @@ public class Tuples
      * @param receiver the receiving column
      * @param elements the tuple elements
      */
-    public static AssignmentTestable.TestResult testTupleAssignment(ColumnSpecification receiver,
-                                                                    List<? extends AssignmentTestable> elements)
+    public static TestResult testTupleAssignment(ColumnSpecification receiver,
+                                                 List<? extends AssignmentTestable> elements)
     {
         try
         {
             validateTupleAssignableTo(receiver, elements);
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
         }
         catch (InvalidRequestException e)
         {
-            return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+            return TestResult.NOT_ASSIGNABLE;
         }
     }
 

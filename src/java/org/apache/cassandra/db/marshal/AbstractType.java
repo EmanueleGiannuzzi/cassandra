@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.cassandra.cql3.AssignmentTestable;
 import org.apache.cassandra.cql3.CQL3Type;
 import org.apache.cassandra.cql3.Term;
+import org.apache.cassandra.cql3.TestResult;
 import org.apache.cassandra.db.rows.Cell;
 import org.apache.cassandra.exceptions.SyntaxException;
 import org.apache.cassandra.io.util.DataInputPlus;
@@ -577,7 +577,7 @@ public abstract class AbstractType<T> implements Comparator<ByteBuffer>
     /**
      * Tests whether a CQL value having this type can be assigned to the provided receiver.
      */
-    public AssignmentTestable.TestResult testAssignment(AbstractType<?> receiverType)
+    public TestResult testAssignment(AbstractType<?> receiverType)
     {
         // testAssignement is for CQL literals and native protocol values, none of which make a meaningful
         // difference between frozen or not and reversed or not.
@@ -589,12 +589,12 @@ public abstract class AbstractType<T> implements Comparator<ByteBuffer>
             receiverType = ReversedType.getInstance(receiverType);
 
         if (equals(receiverType))
-            return AssignmentTestable.TestResult.EXACT_MATCH;
+            return TestResult.EXACT_MATCH;
 
         if (receiverType.isValueCompatibleWith(this))
-            return AssignmentTestable.TestResult.WEAKLY_ASSIGNABLE;
+            return TestResult.WEAKLY_ASSIGNABLE;
 
-        return AssignmentTestable.TestResult.NOT_ASSIGNABLE;
+        return TestResult.NOT_ASSIGNABLE;
     }
 
     /**
